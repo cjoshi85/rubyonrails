@@ -1,17 +1,14 @@
 class ArticlesController < ApplicationController
     
+    before_action :get_param, only: [:edit,:update,:destroy,:show]
     def new
         @article = Article.new
     end
     
     def edit
-        
-        @article = Article.find(params[:id])
-        
     end
     
     def destroy
-       @article = Article.find(params[:id])
        @article.destroy
        flash[:notice] = "Article was successfully deleted"
        redirect_to articles_path
@@ -24,8 +21,6 @@ class ArticlesController < ApplicationController
     end
     
     def update
-        
-        @article = Article.find(params[:id])
         
         if @article.update(article_params)
             
@@ -60,11 +55,17 @@ class ArticlesController < ApplicationController
  
     def show
         
-        @article = Article.find(params[:id])
-        
     end
     
     private
+    
+    def get_param
+        
+        @article = Article.find(params[:id])
+     
+         
+    end
+    
 
     def article_params
 
