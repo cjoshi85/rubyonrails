@@ -1,6 +1,8 @@
 class ArticlesController < ApplicationController
     
     before_action :get_param, only: [:edit,:update,:destroy,:show]
+    before_action :required_user, except: [:show,:index]
+    before_action :required_same_user, only: [:edit,:update,:destroy]
     def new
         @article = Article.new
     end
@@ -72,6 +74,17 @@ class ArticlesController < ApplicationController
 
         params.require(:article).permit(:title, :description)
 
+    end
+    
+    def required_same_user
+        
+        if @article.user != current_user
+            
+            flash[:danger] = "You can delete and update your own articles"
+            redirect_to root_path
+            
+        end
+        
     end
     
     
